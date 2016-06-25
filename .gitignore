@@ -1,0 +1,5 @@
+*.mo
+.DS_Store
+.idea/
+/lib/*
+/web/*
