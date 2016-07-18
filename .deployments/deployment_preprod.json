@@ -1,5 +1,5 @@
 {
-  "name": "my-svc-stage",
+  "name": "my-svc-prod",
   "version": 11,
   "description": "my-svc",
   "owner_email": "sourabh.jain@flipkart.com",
@@ -23,7 +23,7 @@
   },
   "created": " 5-Jul-2016 11:59:16",
   "modified": " 5-Jul-2016 13:41:40",
-  "tagsList": [gt{
+  "tagsList": [{
     "k": "dummytag",
     "v": "dummyValue"
   }, {
