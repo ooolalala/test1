@@ -1,0 +1,63 @@
+{
+  "label": "prod",
+  "version": 3,
+  "strategy": "ROLLING_DEPLOYMENT",
+  "availability_factor": 0.8,
+  "app_id": "test-deployment-svc",
+  "zone": "in-chennai-1",
+  "size": 10,
+  "node_type": "c1.medium",
+  "boot_image": "debian-7.8.0-guest",
+  "users": "temp-KeyQDMzmdmBrz7T9MEuq7RqAkPaqIStZnXaqmkTn5hDCCd0kNAJdCvjY4xV/gnJM2wJ591YVmpzfNyOyiXCx4seNJlQWzvO6C/sOqeQjXciPQ6tvZHie/8vrbFOF0yfby/M2RViDt7SycggTqdFxAVoM0sda0DgnX21EL9MKcEVYNzvgDE5id/5A+8w6zZmzWBCa5XSE7HrwlfvB7kIkdGEcoIeFZkbFQ5UErZca3+F8eR7tykZ8HBSgPHH3lwQAYVXnqiIAVQudChFD1EpkznYQbHLJ6z2n6LQ1y0abl2AsnhnSyylholoY69A56+57HhejEp8+3BNmdtYf4gZFHjTQHR kartikbu@Ghost-MBP.local",
+  "elb_endpoint": "10.47.2.105",
+  "backend_service": "test-vip-backend-service-v1",
+  "tasks": [
+    {
+      "module": "reposvc",
+      "params": {
+        "appkey": "service-model",
+        "env": "catalog-svc",
+        "path": "/etc/apt/sources.list.d/catalog-svc.list"
+      }
+    },
+    {
+      "module": "apt",
+      "params": {
+        "name": "catalog-svc",
+        "state": "latest",
+        "update_cache": "yes",
+        "force": "yes"
+      }
+    },
+    {
+      "module": "copy",
+      "params": {
+        "content": "[default]\naws_access_key_id = {{d42_access_key}}\naws_secret_access_key = {{d42_secret_key}}",
+        "dest": "/etc/catalog-svc/credentials"
+      }
+    },
+    {
+      "module": "copy",
+      "params": {
+        "content": "{\n\t\"listen\": 8080,\n\t\"d42\": {\n\t\t\"enabled\": true,\n\t\t\"endpoint\": \"{{d42_endpoint}}\"\n\t}\n}",
+        "dest": "/etc/catalog-svc/config.json"
+      }
+    },
+    {
+      "module": "svc",
+      "params": {
+        "name": "catalog-svc",
+        "state": "started",
+        "service_dir": "/etc/service"
+      }
+    },
+    {
+      "module": "svc",
+      "params": {
+        "name": "catalog-svc",
+        "state": "restarted",
+        "service_dir": "/etc/service"
+      }
+    }
+  ]
+}
